@@ -28,7 +28,11 @@ const ModelEditUser = ({show, handleClose, dataUserEdit, handleEditUserFromModal
 
     return (
         <>
-            <Modal show={show} onHide={handleClose}>
+            <Modal 
+                show={show}
+                onHide={handleClose}  
+                backdrop="static"
+                keyboard={false}>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit information user</Modal.Title>
                 </Modal.Header>

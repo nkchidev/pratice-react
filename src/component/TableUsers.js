@@ -4,6 +4,7 @@ import { fetchAllUser } from "../services/UserService";
 import ReactPaginate from 'react-paginate';
 import ModalAddNew from './ModalAddNew';
 import ModelEditUser from './ModelEditUser';
+import ModalDelete from './ModalConfirm';
 import _ from 'lodash';
 
 const TableUsers = (props) => {
@@ -13,6 +14,8 @@ const TableUsers = (props) => {
   const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
   const [isShowModalEditUser, setIsShowModalEditUser] = useState(false);
   const [dataUserEdit, setDataUserEdit] = useState({});
+  const [isShowModalDeleteUser, setIsShowModalDeleteUser] = useState(false);
+  const [dataUserDelete, setDataUserDelete] = useState({});
 
   useEffect(() => {
     getUsers(1);
@@ -47,6 +50,11 @@ const TableUsers = (props) => {
     setListUser(cloneListUser);
   }
 
+  const handleDeleteUser = (userDelete) => {
+    setIsShowModalDeleteUser(true);
+    setDataUserDelete(userDelete);
+  }
+
   return (
     <>
       <div className='my-3 add-new'>
@@ -79,6 +87,7 @@ const TableUsers = (props) => {
                   </button>
                   <button
                     className='btn btn-danger'
+                    onClick={() => handleDeleteUser(item)}
                   >Delete
                   </button>
                 </td>
@@ -117,6 +126,11 @@ const TableUsers = (props) => {
         handleClose={() => setIsShowModalEditUser(false)}
         dataUserEdit={dataUserEdit}
         handleEditUserFromModal={handleEditUserFromModal}
+      />
+      <ModalDelete
+        show={isShowModalDeleteUser}
+        handleClose={() => setIsShowModalDeleteUser(false)}
+        dataUserDelete={dataUserDelete}
       />
     </>)
 }
