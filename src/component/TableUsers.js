@@ -6,6 +6,7 @@ import ModalAddNew from './ModalAddNew';
 import ModelEditUser from './ModelEditUser';
 import ModalDelete from './ModalConfirm';
 import _ from 'lodash';
+import "./TableUsers.scss"
 
 const TableUsers = (props) => {
   const [listUser, setListUser] = useState([]);
@@ -16,13 +17,15 @@ const TableUsers = (props) => {
   const [dataUserEdit, setDataUserEdit] = useState({});
   const [isShowModalDeleteUser, setIsShowModalDeleteUser] = useState(false);
   const [dataUserDelete, setDataUserDelete] = useState({});
+  const [sortBy, setSortBy] = useState('asc');
+  const [fieldSort, setFieldSort] = useState('id');
 
   useEffect(() => {
     getUsers(1);
   }, [])
 
   const handleUpdateTable = (user) => {
-      setListUser([user, ...listUser]);
+    setListUser([user, ...listUser]);
   }
 
   const getUsers = async (page) => {
@@ -61,6 +64,14 @@ const TableUsers = (props) => {
     setListUser(cloneListUser);
   }
 
+  const handleSort = (sortBy, fieldSort) => {
+    setSortBy(sortBy);
+    setFieldSort(fieldSort);
+    let cloneListUser = _.clone(listUser);
+    cloneListUser = _.orderBy(cloneListUser, [fieldSort], [sortBy]);
+    setListUser(cloneListUser);
+  }
+
   return (
     <>
       <div className='my-3 add-new'>
@@ -70,9 +81,29 @@ const TableUsers = (props) => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
+            <th className='sort-header'>
+              <span>ID</span>
+              <span>
+                <i className="fa-solid fa-arrow-down-long"
+                  onClick={() => handleSort("desc", "id")}>
+                </i>
+                <i className="fa-solid fa-arrow-up-long"
+                  onClick={() => handleSort("asc", "id")}>
+                </i>
+              </span>
+            </th>
             <th>Email</th>
-            <th>First Name</th>
+            <th className='sort-header'>
+              <span>First Name</span>
+              <span>
+                <i className="fa-solid fa-arrow-down-long"
+                  onClick={() => handleSort("desc", "first_name")}>
+                </i>
+                <i className="fa-solid fa-arrow-up-long"
+                  onClick={() => handleSort("asc", "first_name")}>
+                </i>
+              </span>
+            </th>
             <th>Last Name</th>
             <th>Action</th>
           </tr>
@@ -86,7 +117,7 @@ const TableUsers = (props) => {
                 <td>{item.first_name}</td>
                 <td>{item.last_name}</td>
                 <td>
-                  <button 
+                  <button
                     className='btn btn-warning mx-3'
                     onClick={() => handleEditUser(item)}
                   >Edit
