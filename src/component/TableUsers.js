@@ -55,6 +55,12 @@ const TableUsers = (props) => {
     setDataUserDelete(userDelete);
   }
 
+  const handleDeleteUserFromMoal = (userDelete) => {
+    let cloneListUser = _.clone(listUser);
+    cloneListUser = cloneListUser.filter(item => item.id !== userDelete.id);
+    setListUser(cloneListUser);
+  }
+
   return (
     <>
       <div className='my-3 add-new'>
@@ -131,6 +137,7 @@ const TableUsers = (props) => {
         show={isShowModalDeleteUser}
         handleClose={() => setIsShowModalDeleteUser(false)}
         dataUserDelete={dataUserDelete}
+        handleDeleteUserFromMoal={handleDeleteUserFromMoal}
       />
     </>)
 }
