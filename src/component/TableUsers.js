@@ -5,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 import ModalAddNew from './ModalAddNew';
 import ModelEditUser from './ModelEditUser';
 import ModalDelete from './ModalConfirm';
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import "./TableUsers.scss"
 
 const TableUsers = (props) => {
@@ -72,12 +72,28 @@ const TableUsers = (props) => {
     setListUser(cloneListUser);
   }
 
+  const handleSearch = debounce((keyword) => {
+    if (keyword) {
+      let cloneListUser = _.clone(listUser);
+      cloneListUser = cloneListUser.filter(item => item.email.includes(keyword));
+      setListUser(cloneListUser);
+    } else {
+      getUsers(1);
+    }
+  }, 500);
+
   return (
     <>
       <div className='my-3 add-new'>
         <span><b>List users</b></span>
         <button className='btn btn-success' onClick={() => setIsShowModalAddNew(true)}>Add new user</button>
       </div>
+      <input
+        type="text"
+        className='col-4 mb-3'
+        placeholder='Search user by email'
+        onChange={(e) => handleSearch(e.target.value)}
+      />
       <Table striped bordered hover>
         <thead>
           <tr>
