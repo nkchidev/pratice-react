@@ -7,6 +7,7 @@ import ModelEditUser from './ModelEditUser';
 import ModalDelete from './ModalConfirm';
 import _, { debounce } from 'lodash';
 import "./TableUsers.scss"
+import { CSVLink } from "react-csv";
 
 const TableUsers = (props) => {
   const [listUser, setListUser] = useState([]);
@@ -19,6 +20,7 @@ const TableUsers = (props) => {
   const [dataUserDelete, setDataUserDelete] = useState({});
   const [sortBy, setSortBy] = useState('asc');
   const [fieldSort, setFieldSort] = useState('id');
+  const [dataExport, setDataExport] = useState([]);
 
   useEffect(() => {
     getUsers(1);
@@ -82,11 +84,48 @@ const TableUsers = (props) => {
     }
   }, 500);
 
+  const getUsersExport = (event,done) => {
+    let result = [];
+    if(listUser && listUser.length > 0){
+      result.push(["Id", "Email", "First name", "Last name"]);
+      listUser.map((item,index) => {
+        let arr = [];
+        arr[0] = item.id;
+        arr[1] = item.email;
+        arr[2] = item.first_name;
+        arr[3] = item.last_name;
+        result.push(arr);
+      })
+      setDataExport(result);
+      done();
+    }
+  }
+
   return (
     <>
       <div className='my-3 add-new'>
         <span><b>List users</b></span>
-        <button className='btn btn-success' onClick={() => setIsShowModalAddNew(true)}>Add new user</button>
+        <div className="group-btns">
+          <label className='btn btn-warning' htmlFor="import">
+            <i class="fa-solid fa-file-import"></i> Import
+          </label>
+          <input type="file" id='import' hidden />
+          <CSVLink 
+            data={dataExport} 
+            filename={"users.csv"}
+            className="btn btn-primary"
+            asyncOnClick={true}
+            onClick={getUsersExport}
+          >
+            <i class="fa-solid fa-file-arrow-down"></i> Export
+          </CSVLink>
+          <button
+            className='btn btn-success'
+            onClick={() => setIsShowModalAddNew(true)}
+          >
+            <i class="fa-solid fa-circle-plus"></i> Add new user
+          </button>
+        </div>
       </div>
       <input
         type="text"
