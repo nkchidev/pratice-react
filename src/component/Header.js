@@ -13,7 +13,7 @@ const Header = () => {
     const { logout, user } = useContext(UserContext)
     const handleLogout = () => {
         logout();
-        navigate("/");
+        navigate("/login");
         toast.success("Logout success!");
     }
     return (<>

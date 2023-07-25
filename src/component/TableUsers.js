@@ -113,16 +113,16 @@ const TableUsers = (props) => {
       }
       Papa.parse(file, {
         // header: true,
-        complete: function(results) {
+        complete: function (results) {
           let rawCSV = results.data;
-          if(rawCSV.length > 0){
-            if(rawCSV[0] && rawCSV[0].length === 3){
-              if(rawCSV[0][0] !== "email" || rawCSV[0][1] !== "first_name" || rawCSV[0][2] !== "last_name"){
+          if (rawCSV.length > 0) {
+            if (rawCSV[0] && rawCSV[0].length === 3) {
+              if (rawCSV[0][0] !== "email" || rawCSV[0][1] !== "first_name" || rawCSV[0][2] !== "last_name") {
                 toast.error("Wrong format Header CSV file");
-              }else{
+              } else {
                 let result = [];
-                rawCSV.forEach((item,index) => {
-                  if(index > 0 && item.length === 3){
+                rawCSV.forEach((item, index) => {
+                  if (index > 0 && item.length === 3) {
                     let obj = {};
                     obj.email = item[0];
                     obj.first_name = item[1];
@@ -133,10 +133,10 @@ const TableUsers = (props) => {
                 setListUser(result);
                 toast.success("Import users succeed!");
               }
-            }else{
+            } else {
               toast.error("Wrong format CSV file");
             }
-          }else{
+          } else {
             toast.error("Not found data on CSV file");
           }
         }
@@ -147,9 +147,9 @@ const TableUsers = (props) => {
 
   return (
     <>
-      <div className='my-3 add-new'>
+      <div className='my-3 add-new d-md-flex'>
         <span><b>List users</b></span>
-        <div className="group-btns">
+        <div className="group-btns mt-md-0 mt-2">
           <label className='btn btn-warning' htmlFor="import">
             <i className="fa-solid fa-file-import"></i> Import
           </label>
@@ -172,66 +172,70 @@ const TableUsers = (props) => {
           </button>
         </div>
       </div>
-      <input
-        type="text"
-        className='col-4 mb-3'
-        placeholder='Search user by email'
-        onChange={(e) => handleSearch(e.target.value)}
-      />
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th className='sort-header'>
-              <span>ID</span>
-              <span>
-                <i className="fa-solid fa-arrow-down-long"
-                  onClick={() => handleSort("desc", "id")}>
-                </i>
-                <i className="fa-solid fa-arrow-up-long"
-                  onClick={() => handleSort("asc", "id")}>
-                </i>
-              </span>
-            </th>
-            <th>Email</th>
-            <th className='sort-header'>
-              <span>First Name</span>
-              <span>
-                <i className="fa-solid fa-arrow-down-long"
-                  onClick={() => handleSort("desc", "first_name")}>
-                </i>
-                <i className="fa-solid fa-arrow-up-long"
-                  onClick={() => handleSort("asc", "first_name")}>
-                </i>
-              </span>
-            </th>
-            <th>Last Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listUser && listUser.length > 0 &&
-            listUser.map((item, index) => (
-              <tr key={`user-${index}`}>
-                <td>{item.id}</td>
-                <td>{item.email}</td>
-                <td>{item.first_name}</td>
-                <td>{item.last_name}</td>
-                <td>
-                  <button
-                    className='btn btn-warning mx-3'
-                    onClick={() => handleEditUser(item)}
-                  >Edit
-                  </button>
-                  <button
-                    className='btn btn-danger'
-                    onClick={() => handleDeleteUser(item)}
-                  >Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <div className='col-12 col-md-4 mb-3'>
+        <input
+          type="text"
+          placeholder='Search user by email'
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+      </div>
+      <div className="customize-table">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th className='sort-header'>
+                <span>ID</span>
+                <span>
+                  <i className="fa-solid fa-arrow-down-long"
+                    onClick={() => handleSort("desc", "id")}>
+                  </i>
+                  <i className="fa-solid fa-arrow-up-long"
+                    onClick={() => handleSort("asc", "id")}>
+                  </i>
+                </span>
+              </th>
+              <th>Email</th>
+              <th className='sort-header'>
+                <span>First Name</span>
+                <span>
+                  <i className="fa-solid fa-arrow-down-long"
+                    onClick={() => handleSort("desc", "first_name")}>
+                  </i>
+                  <i className="fa-solid fa-arrow-up-long"
+                    onClick={() => handleSort("asc", "first_name")}>
+                  </i>
+                </span>
+              </th>
+              <th>Last Name</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listUser && listUser.length > 0 &&
+              listUser.map((item, index) => (
+                <tr key={`user-${index}`}>
+                  <td>{item.id}</td>
+                  <td>{item.email}</td>
+                  <td>{item.first_name}</td>
+                  <td>{item.last_name}</td>
+                  <td>
+                    <button
+                      className='btn btn-warning mx-3'
+                      onClick={() => handleEditUser(item)}
+                    >Edit
+                    </button>
+                    <button
+                      className='btn btn-danger'
+                      onClick={() => handleDeleteUser(item)}
+                    >Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
+
       <ReactPaginate
         breakLabel="..."
         nextLabel="next >"

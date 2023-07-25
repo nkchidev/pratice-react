@@ -26,7 +26,7 @@ const Login = () => {
             return;
         }
         setIsShowLoading(true);
-        let res = await loginAPI(email,password);
+        let res = await loginAPI(email.trim(),password);
         if(res && res.token){
             login(email, res.token);
             navigate("/");
@@ -43,6 +43,12 @@ const Login = () => {
         navigate("/");
     }
 
+    const handlePressEnter= (event) => {
+        if(event && event.key === 'Enter'){
+            handleLogin();
+        }
+    }
+
     return (<>
         <div id="form-login" className="col-12 col-sm-4">
             <p className="title-login">Log in</p>
@@ -56,9 +62,10 @@ const Login = () => {
                 <input type={isShowPassword ? "text" : "password"}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    onKeyDown={(event) => handlePressEnter(event)}
                     placeholder="Enter your password" />
                 <i 
-                    class={isShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
+                    className={isShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
                     onClick={() => setIsShowPassword(!isShowPassword)}
                 ></i>
             </div>
@@ -67,11 +74,11 @@ const Login = () => {
                 className={email && password ? "btn-login active" : "btn-login"}
                 onClick={() => handleLogin()}
             >
-                {isShowLoading && <i class="fas fa-spinner fa-spin"></i>}
+                {isShowLoading && <i className="fas fa-spinner fa-spin"></i>}
                 &nbsp;Log in
             </button>
             <div className="back" style={{ cursor: "pointer" }} onClick={handleBack}>
-                <i class="fa-solid fa-angles-left"></i>
+                <i className="fa-solid fa-angles-left"></i>
                 <span>Go back</span> 
             </div>
         </div>

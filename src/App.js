@@ -13,7 +13,6 @@ function App() {
       login(localStorage.getItem("email", localStorage.getItem("token")));
     }
   }, []);
-
   return (
     <>
       <div className='app-container'>
